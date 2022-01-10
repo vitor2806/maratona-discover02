@@ -1,10 +1,10 @@
 const express = require('express')
 const server = express()
 
-server.get('/', (req, res) => {
-   console.log('Im here')
+server.use(express.static('public'))
 
-   return res.send('Hello')
+server.get('/', (req, res) => {
+   return res.sendFile(__dirname + '/views/index.html')
 })
 
 server.listen(3000, () => {
