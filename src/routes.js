@@ -1,5 +1,8 @@
 const express = require('express')
+//uses express module to configure server
+
 const routes = express.Router()
+//configure file routes through express.Router()
 
 const viewPath = __dirname + '/views/'
 
@@ -10,3 +13,4 @@ routes.get('/job/edit', (req, res) => res.render(viewPath + 'job-edit'))
 routes.get('/profile', (req, res) => res.render(viewPath + 'profile'))
 
 module.exports = routes
+//export routes
