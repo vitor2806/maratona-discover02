@@ -16,12 +16,12 @@ const profile = {
 }
 
 //if i'm using only one line function (like this above, where it content will be only a return) I can use it without {} and return
-routes.get('/', (req, res) => res.render(viewPath + 'index'))
+routes.get('/', (req, res) => res.render(viewPath + 'index', {profile}))
 routes.get('/job', (req, res) => res.render(viewPath + 'job'))
+//Routes.post will handle post form method
+routes.post('/job', (req, res) => console.log(req.body))
 routes.get('/job/edit', (req, res) => res.render(viewPath + 'job-edit'))
-routes.get('/profile', (req, res) =>
-   res.render(viewPath + 'profile', { profile })
-)
+routes.get('/profile', (req, res) => res.render(viewPath + 'profile', { profile }))
 
 module.exports = routes
 //export routes

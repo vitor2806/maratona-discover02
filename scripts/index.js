@@ -12,5 +12,6 @@ for (let card of cards) {
    deleteButton.onclick = () => {
       modal.open()
       deleteForm.setAttribute('action', '/job/delete/' + cardId)
+      console.log('a')
    }
 }
