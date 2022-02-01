@@ -18,7 +18,6 @@ server.use(express.urlencoded({extended: true}))
 server.use(routes)
 
 
-
 //server start listening to port 3000, every requisition in this port shall be processed by the server
 server.listen(3000, () => {
    console.log('Running...')
