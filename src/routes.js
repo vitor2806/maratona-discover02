@@ -58,7 +58,7 @@ const Job = {
          id: 1,
          name: 'Pizzaria Guloso',
          'daily-hours': 2,
-         'total-hours': 1,
+         'total-hours': 4,
          createdAt: Date.now(),
       },
       {
@@ -81,7 +81,10 @@ const Job = {
                ...job,
                remaining,
                status,
-               budget: Profile.data['amount-hour'] * job['total-hours'], //if i'm working 10 hours in a project and my amount-hour is R$ 10,00, i'll get R$ 100,00
+               budget: Job.tools.calculateBudget(
+                  job,
+                  Profile.data['amount-hour']
+               ), //if i'm working 10 hours in a project and my amount-hour is R$ 10,00, i'll get R$ 100,00
             };
          });
 
@@ -93,7 +96,7 @@ const Job = {
       },
 
       save(req, res) {
-         const lastElementId = Job.data[Job.data.length - 1]?.id || 1; //will search id from jobs if theres no element with id, id will be 1.
+         const lastElementId = Job.data[Job.data.length - 1]?.id || 0; //will search id from jobs if theres no element with id, id will be 1.
 
          //Will push a new job into jobs array with req.body data
          Job.data.push({
@@ -104,6 +107,49 @@ const Job = {
             createdAt: Date.now(),
          });
 
+         return res.redirect('/');
+      },
+
+      show(req, res) {
+         const jobID = req.params.id;
+         const job = Job.data.find((job) => Number(job.id) === Number(jobID)); //find function will search for a job that matches function parameter, if it matches then true is returned and stored in job const
+         if (!job) {
+            return res.send('Error: Job not found');
+         }
+
+         job.budget = Job.tools.calculateBudget(
+            job,
+            Profile.data['amount-hour']
+         );
+         return res.render(viewPath + 'job-edit', { job });
+      },
+
+      update(req, res) {
+         const jobID = req.params.id;
+         const job = Job.data.find((job) => Number(job.id) === Number(jobID)); //find function will search for a job that matches function parameter, if it matches then true is returned and stored in job const
+         if (!job) {
+            return res.send('Error: Job not found');
+         }
+
+         const updatedJob = {
+            ...job,
+            name: req.body.name,
+            'total-hours': req.body['total-hours'],
+            'daily-hours': req.body['daily-hours'],
+         };
+
+         Job.data = Job.data.map((job) => {
+            if (Number(job.id) === Number(jobID)) {
+               job = updatedJob;
+            }
+            return job;
+         });
+         res.redirect('/job/' + jobID);
+      },
+
+      delete(req, res) {
+         const jobID = req.params.id;
+         Job.data = Job.data.filter((job) => Number(job.id) !== Number(jobID)); //filter acts almost as find function, but instead of returning true it will remove it from the list
          return res.redirect('/');
       },
    },
@@ -124,6 +170,9 @@ const Job = {
 
          return dayDiff;
       },
+
+      calculateBudget: (job, amountPerHour) =>
+         amountPerHour * job['total-hours'],
    },
 };
 
@@ -134,7 +183,9 @@ const Job = {
 routes.get('/', Job.controllers.index);
 routes.get('/job', Job.controllers.create);
 routes.post('/job', Job.controllers.save); //Routes.post will handle post form method
-routes.get('/job/edit', (req, res) => res.render(viewPath + 'job-edit'));
+routes.get('/job/:id', Job.controllers.show);
+routes.post('/job/:id', Job.controllers.update);
+routes.post('/job/delete/:id', Job.controllers.delete);
 routes.get('/profile', Profile.controllers.index);
 routes.post('/profile', Profile.controllers.update);
 

@@ -22,7 +22,7 @@
          rel="stylesheet"
       />
 
-      <script src="scripts/index.js" defer type="module"></script>
+      <script src="/scripts/index.js" defer type="module"></script>
    </head>
    <body id="page-index">
       <header class="page-header">
@@ -96,7 +96,7 @@
                         </div>
                         <div class="actions column flex">
                            <p class="sr-only">Ações</p>
-                           <a href="/job/edit" class="button white edit" title="Editar Job">
+                           <a href="/job/<%= job.id %> " class="button white edit" title="Editar Job">
                               <img src="/images/edit-24.svg" alt="Editar Job">
                            </a>
                            <button class="delete button white" title="Excluir Job">
