@@ -16,6 +16,28 @@ const profile = {
    'amount-hour': 75,
 };
 
+//object literal
+const Job = {
+   controllers: {
+      index(req, res) {
+         const updatedJobs = jobs.map((job) => {
+            const remaining = remainingDays(job);
+            const status = remaining <= 0 ? 'done' : 'progress'; //check if theres any day left, if isnt then its done, if is then its progress
+
+            //js object spread
+            return {
+               ...job,
+               remaining,
+               status,
+               budget: profile['amount-hour'] * job['total-hours'], //if i'm working 10 hours in a project and my amount-hour is R$ 10,00, i'll get R$ 100,00
+            };
+         });
+
+         return res.render(viewPath + 'index', { jobs: updatedJobs });
+      },
+   },
+};
+
 const jobs = [
    {
       id: 1,
@@ -50,21 +72,7 @@ function remainingDays(job) {
 //map vs foreach
 //I can store map returnal into a variable
 //I cant store forEach into it
-routes.get('/', (req, res) => {
-   const updatedJobs = jobs.map((job) => {
-      const remaining = remainingDays(job);
-      const status = remaining <= 0 ? 'done' : 'progress'; //check if theres any day left, if isnt then its done, if is then its progress
-
-      //js object spread
-      return {
-         ...job,
-         remaining,
-         status,
-         budget: profile['amount-hour'] * job['total-hours'], //if i'm working 10 hours in a project and my amount-hour is R$ 10,00, i'll get R$ 100,00
-      };
-   });
-   return res.render(viewPath + 'index', { jobs: updatedJobs });
-});
+routes.get('/', Job.controllers.index);
 
 routes.get('/job', (req, res) => res.render(viewPath + 'job'));
 //Routes.post will handle post form method
