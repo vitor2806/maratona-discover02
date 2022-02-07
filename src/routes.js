@@ -2,7 +2,6 @@
 const express = require('express');
 //configure file routes through express.Router()
 const routes = express.Router();
-const viewPath = __dirname + '/views/';
 
 //object literal
 const Profile = {
@@ -18,7 +17,7 @@ const Profile = {
 
    controllers: {
       index(req, res) {
-         return res.render(viewPath + 'profile', { profile: Profile.data });
+         return res.render('profile', { profile: Profile.data });
       },
 
       update(req, res) {
@@ -88,11 +87,11 @@ const Job = {
             };
          });
 
-         return res.render(viewPath + 'index', { jobs: updatedJobs });
+         return res.render('index', { jobs: updatedJobs });
       },
 
       create(req, res) {
-         return res.render(viewPath + 'job');
+         return res.render('job');
       },
 
       save(req, res) {
@@ -121,7 +120,7 @@ const Job = {
             job,
             Profile.data['amount-hour']
          );
-         return res.render(viewPath + 'job-edit', { job });
+         return res.render('job-edit', { job });
       },
 
       update(req, res) {
@@ -175,7 +174,6 @@ const Job = {
          amountPerHour * job['total-hours'],
    },
 };
-
 //map vs foreach
 //I can store map returnal into a variable
 //I cant store forEach into it
