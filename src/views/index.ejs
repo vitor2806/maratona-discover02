@@ -80,12 +80,20 @@
                   <!-- creates a job for each job inside job array-->
                   <% jobs.forEach((job) => { %>
 
-                     <div class="card <%= job.status %> " data-id="<%= job.id %>">
+                     <div class="card <%= job.status %> <%= job.remaining == 1 ? 'warning' : '' %>" data-id="<%= job.id %>">
                         <div class="id column"><%= job.id %></div>
                         <div class="name column"> <%= job.name %>  </div>
                         <div class="deadline column">
                            <span>Prazo</span>
-                           <p><%= job.status === 'done' ? 'Prazo encerrado' : job.remaining + ' dias para a entrega' %> </p>
+                           <p>
+                              <% if (job.remaining < 1) { %> 
+                                 <%= 'Prazo encerrado' %>
+                              <% } else if (job.remaining == 1) { %>
+                                 <%= job.remaining + ' dia para a entrega' %> 
+                              <% } else {%>
+                                 <%= job.remaining + ' dias para a entrega' %> 
+                              <% } %>   
+                           </p>
                         </div>
                         <div class="amount column">
                            <span>Valor</span>
