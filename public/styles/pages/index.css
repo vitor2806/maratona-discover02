@@ -229,17 +229,12 @@ main {
 }
 
 .warning {
-   background-color: #ffab4b;
-}
-
-.card.warning span,
-.card.warning .id {
-   color: white;
-}
-
-.card.warning:hover span,
-.card.warning:hover .id {
-   color: var(--color-card-label);
+   /* background-image: linear-gradient(
+      to right,
+      rgb(255, 185, 185) 0%,
+      rgba(255, 255, 255, 0.5) 45%
+   ); */
+   border-bottom: 5px solid red;
 }
 
 @media (max-width: 1390px) {
