@@ -2,53 +2,8 @@
 const express = require('express');
 //configure file routes through express.Router()
 const routes = express.Router();
-
-//object literal
-const Profile = {
-   data: {
-      name: 'Vitor',
-      avatar: 'https://avatars.githubusercontent.com/u/95248045?v=4',
-      'monthly-budget': 4000,
-      'days-per-week': 5,
-      'hours-per-day': 6,
-      'vacation-per-year': 3,
-      'amount-hour': 75,
-   },
-
-   controllers: {
-      index(req, res) {
-         return res.render('profile', { profile: Profile.data });
-      },
-
-      update(req, res) {
-         //req.body to get data
-         const data = req.body;
-
-         //weeks in a year
-         const weeksInAYear = 52;
-
-         //remove vacation from weeks in a year, getting how much weeks are in a month after it
-         const weeksInAMonth = (weeksInAYear - data['vacation-per-year']) / 12;
-
-         //how much hour a week
-         const weekTotalHours = data['hours-per-day'] * data['days-per-week'];
-
-         //total hours in a month
-         const monthTotalHours = weekTotalHours * weeksInAMonth;
-
-         //amount/hour value
-         const amountPerHour = data['monthly-budget'] / monthTotalHours;
-
-         Profile.data = {
-            ...Profile.data, //first copy all data from profile
-            ...req.body, //then copy all data from req.body
-            'amount-hour': amountPerHour, //then add amountPerHour to 'amount-hour' key
-         };
-
-         return res.redirect('/profile');
-      },
-   },
-};
+//imports
+const ProfileController = require('./controllers/ProfileController');
 
 //object literal
 const Job = {
@@ -184,8 +139,8 @@ routes.post('/job', Job.controllers.save); //Routes.post will handle post form m
 routes.get('/job/:id', Job.controllers.show);
 routes.post('/job/:id', Job.controllers.update);
 routes.post('/job/delete/:id', Job.controllers.delete);
-routes.get('/profile', Profile.controllers.index);
-routes.post('/profile', Profile.controllers.update);
+routes.get('/profile', ProfileController.index);
+routes.post('/profile', ProfileController.update);
 
 //export routes
 module.exports = routes;
