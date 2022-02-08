@@ -3,26 +3,6 @@ const Profile = require('../model/Profile');
 const Tools = require('../utils/jobTools');
 
 module.exports = {
-   index(req, res) {
-      const jobs = Job.get();
-      const profile = Profile.get();
-
-      const updatedJobs = jobs.map((job) => {
-         const remaining = Tools.remainingDays(job);
-         const status = remaining <= 0 ? 'done' : 'progress'; //check if theres any day left, if isnt then its done, if is then its progress
-
-         //js object spread
-         return {
-            ...job,
-            remaining,
-            status,
-            budget: Tools.calculateBudget(job, profile['amount-hour']), //if i'm working 10 hours in a project and my amount-hour is R$ 10,00, i'll get R$ 100,00
-         };
-      });
-
-      return res.render('index', { jobs: updatedJobs });
-   },
-
    create(req, res) {
       return res.render('job');
    },
@@ -72,19 +52,24 @@ module.exports = {
          'daily-hours': req.body['daily-hours'],
       };
 
-      jobs = jobs.map((job) => {
+      //remove jobs to add updated job data into a new variable then do Job.update(variable) to update job data
+      const newData = jobs.map((job) => {
          if (Number(job.id) === Number(jobID)) {
             job = updatedJob;
          }
          return job;
       });
+
+      Job.update(newData);
+
       res.redirect('/job/' + jobID);
    },
 
    delete(req, res) {
-      const jobs = Job.get();
       const jobID = req.params.id;
-      jobs = jobs.filter((job) => Number(job.id) !== Number(jobID)); //filter acts almost as find function, but instead of returning true it will remove it from the list
+
+      Job.delete(jobID);
+
       return res.redirect('/');
    },
 };

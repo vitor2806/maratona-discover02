@@ -5,8 +5,9 @@ const routes = express.Router();
 //imports
 const ProfileController = require('./controllers/ProfileController');
 const JobController = require('./controllers/JobController');
+const DashboardController = require('./controllers/DashboardController');
 
-routes.get('/', JobController.index);
+routes.get('/', DashboardController.index);
 routes.get('/job', JobController.create);
 routes.post('/job', JobController.save); //Routes.post will handle post form method
 routes.get('/job/:id', JobController.show);
