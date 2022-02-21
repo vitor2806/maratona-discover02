@@ -13,11 +13,19 @@ module.exports = {
          total: jobs.length,
       };
 
+      let jobTotalHours = 0;
+
       const updatedJobs = jobs.map((job) => {
          const remaining = JobTools.remainingDays(job);
          const status = remaining <= 0 ? 'done' : 'progress'; //check if theres any day left, if isnt then its done, if is then its progress
 
          statusCount[status]++; //is the same as status == 'done' ? statusCount.done++ : statusCount.progress++;
+
+         //if the job isn't done yet, then get the amount of daily hours from it
+         jobTotalHours =
+            status == 'progress'
+               ? (jobTotalHours += Number(job['daily-hours']))
+               : jobTotalHours;
 
          //js object spread
          return {
@@ -28,10 +36,13 @@ module.exports = {
          };
       });
 
+      const freeTime = profile['hours-per-day'] - jobTotalHours;
+
       return res.render('index', {
          jobs: updatedJobs,
          profile: profile,
          statusCount: statusCount,
+         freeTime: freeTime,
       });
    },
 };
