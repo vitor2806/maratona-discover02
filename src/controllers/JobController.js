@@ -12,7 +12,7 @@ module.exports = {
       const lastElementId = jobs[jobs.length - 1]?.id || 0; //will search id from jobs if theres no element with id, id will be 1.
 
       //Will push a new job into jobs array with req.body data
-      jobs.push({
+      Job.create({
          id: lastElementId + 1,
          name: req.body.name,
          'daily-hours': req.body['daily-hours'],
