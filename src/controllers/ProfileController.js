@@ -1,11 +1,12 @@
 const Profile = require('../model/Profile');
 
 module.exports = {
-   index(req, res) {
-      return res.render('profile', { profile: Profile.get() });
+   async index(req, res) {
+      const profile = await Profile.get();
+      return res.render('profile', { profile: profile });
    },
 
-   update(req, res) {
+   async update(req, res) {
       //req.body to get data
       const data = req.body;
 
@@ -24,8 +25,8 @@ module.exports = {
       //amount/hour value
       const amountPerHour = data['monthly-budget'] / monthTotalHours;
 
-      Profile.update({
-         ...Profile.get(), //first copy all data from profile
+      await Profile.update({
+         ...(await Profile.get()), //first copy all data from profile
          ...req.body, //then copy all data from req.body
          'amount-hour': amountPerHour, //then add amountPerHour to 'amount-hour' key
       });
