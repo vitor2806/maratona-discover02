@@ -5,14 +5,17 @@
    "main": "src/server.js",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "nodemon ."
+      "dev": "nodemon .",
+      "db": "node src/db/init.js"
    },
    "keywords": [],
    "author": "",
    "license": "ISC",
    "dependencies": {
       "ejs": "^3.1.6",
-      "express": "^4.17.2"
+      "express": "^4.17.2",
+      "sqlite": "^4.0.23",
+      "sqlite3": "^5.0.2"
    },
    "devDependencies": {
       "nodemon": "^2.0.15"
